@@ -51,7 +51,7 @@ public class HomeController {
     // Paths
     // -------------------------------------------------------------------------
 
-    private static final String HOME_PREFIX = "/home";
+    private static final String HOME_PREFIX = "/dashboard";
 
     private static final String OCPP_JSON_STATUS = HOME_PREFIX + "/ocppJsonStatus";
     private static final String CONNECTOR_STATUS_PATH = HOME_PREFIX + "/connectorStatus";
@@ -63,7 +63,7 @@ public class HomeController {
     @RequestMapping(value = {"", HOME_PREFIX})
     public String getHome(Model model) {
         model.addAttribute("stats", chargePointHelperService.getStats());
-        return "home";
+        return "dashboard";
     }
 
     @RequestMapping(value = CONNECTOR_STATUS_PATH)

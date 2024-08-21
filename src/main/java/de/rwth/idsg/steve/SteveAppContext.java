@@ -137,7 +137,7 @@ public class SteveAppContext {
             RedirectPatternRule rule = new RedirectPatternRule();
             rule.setTerminating(true);
             rule.setPattern(redirect);
-            rule.setLocation(CONFIG.getContextPath() + "/manager/home");
+            rule.setLocation(CONFIG.getContextPath() + "/manager/dashboard");
             rewrite.addRule(rule);
         }
         return rewrite;
