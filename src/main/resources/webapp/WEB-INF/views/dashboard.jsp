@@ -86,5 +86,67 @@
 			</c:forEach>
 		</span>
 	</a>
+	<table class="res action">
+		<thead>
+		<tr>
+			<th data-sort="string">ChargeBox ID</th>
+			<th data-sort="string">Description</th>
+			<th data-sort="string">OCPP Protocol</th>
+			<th data-sort="date">Last Heartbeat</th>
+			<th>
+				<form:form action="${ctxPath}/manager/chargepoints/add" method="get">
+					<input type="submit" class="blueSubmit" value="Add New">
+				</form:form>
+			</th>
+			<th>Message</th>
+		</tr>
+		</thead>
+		<tbody>
+		<c:forEach items="${cpList}" var="cp">
+			<tr><td><a href="${ctxPath}/manager/chargepoints/details/${cp.chargeBoxPk}">${cp.chargeBoxId}</a></td>
+				<td>${cp.description}</td>
+				<td>${cp.ocppProtocol}</td>
+				<td data-sort-value="${cp.lastHeartbeatTimestampDT.millis}">${cp.lastHeartbeatTimestamp}</td>
+				<td>
+					<form:form action="${ctxPath}/manager/chargepoints/delete/${cp.chargeBoxPk}">
+						<input type="submit" class="redSubmit" value="Delete">
+					</form:form>
+				</td>
+				<td><button type="button" class="greenView">View</button></td>
+			</tr>
+		</c:forEach>
+		</tbody>
+	</table>
+
+	<!-- <table class="res" id="connectorStatusTable">
+		<thead>
+			<tr>
+				<th data-sort="string">ChargeBox ID</th>
+				<th data-sort="int">Connector ID</th>
+				<th data-sort="date">Date/Time</th>
+				<th data-sort="string">Status</th>
+				<th data-sort="string">Error Code</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${connectorStatusList}" var="cs">
+				<tr>
+					<td>
+						<a href="${ctxPath}/manager/chargepoints/details/${cs.chargeBoxPk}">${cs.chargeBoxId}</a>
+						<c:if test="${cs.jsonAndDisconnected}">
+							<a class="tooltip" href="#"><img src="${ctxPath}/static/images/offline-icon.svg" style="height: 1em">
+								<span>This JSON charge point is currently disconnected. The status information of its
+								connectors might be not up-to-date.</span>
+							</a>
+						</c:if>
+					</td>
+					<td>${cs.connectorId}</td>
+					<td data-sort-value="${cs.statusTimestamp.millis}">${cs.timeStamp}</td>
+					<td><encode:forHtml value="${cs.status}" /></td>
+					<td><encode:forHtml value="${cs.errorCode}" /></td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table> -->
 </div></div>
 <%@ include file="00-footer.jsp" %>

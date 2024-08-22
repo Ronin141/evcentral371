@@ -23,6 +23,7 @@ import de.rwth.idsg.steve.repository.dto.ConnectorStatus;
 import de.rwth.idsg.steve.service.ChargePointHelperService;
 import de.rwth.idsg.steve.utils.ConnectorStatusCountFilter;
 import de.rwth.idsg.steve.utils.ConnectorStatusFilter;
+import de.rwth.idsg.steve.web.dto.ChargePointQueryForm;
 import de.rwth.idsg.steve.web.dto.ConnectorStatusForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,8 +62,16 @@ public class HomeController {
     // -------------------------------------------------------------------------
 
     @RequestMapping(value = {"", HOME_PREFIX})
-    public String getHome(Model model) {
+    public String getHome(Model model,@ModelAttribute(PARAMS) ChargePointQueryForm params) {
+
+        // initList(model, new ChargePointQueryForm());
+        // ,@ModelAttribute(PARAMS) ConnectorStatusForm params2
+        // List<ConnectorStatus> latestList = chargePointHelperService.getChargePointConnectorStatus(params2);
+        // List<ConnectorStatus> filteredList = ConnectorStatusFilter.filterAndPreferZero(latestList);
+
+        // model.addAttribute("connectorStatusList", filteredList);
         model.addAttribute("stats", chargePointHelperService.getStats());
+        model.addAttribute("cpList", chargePointRepository.getOverview(params));
         return "dashboard";
     }
 
@@ -87,5 +96,10 @@ public class HomeController {
     public String getOcppJsonStatus(Model model) {
         model.addAttribute("ocppJsonStatusList", chargePointHelperService.getOcppJsonStatus());
         return "ocppJsonStatus";
+    }
+    private void initList(Model model, ChargePointQueryForm params) {
+        model.addAttribute(PARAMS, params);
+        model.addAttribute("cpList", chargePointRepository.getOverview(params));
+        model.addAttribute("unknownList", chargePointHelperService.getUnknownChargePoints());
     }
 }
