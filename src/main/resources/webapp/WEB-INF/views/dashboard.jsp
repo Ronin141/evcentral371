@@ -127,8 +127,8 @@
 			<tr>
 				<th data-sort="string">ChargeBox ID</th>
 				<th data-sort="string">Description</th>
-				<th data-sort="string">OCPP Protocol</th>
 				<th data-sort="date">Last Heartbeat</th>
+				<th data-sort="string">Connector</th>
 				<th>
 					<form:form action="${ctxPath}/manager/chargepoints/add" method="get">
 						<input type="submit" class="blueSubmit" value="Add New">
@@ -141,8 +141,10 @@
 			<c:forEach items="${cpList}" var="cp">
 				<tr><td><a href="${ctxPath}/manager/chargepoints/details/${cp.chargeBoxPk}">${cp.chargeBoxId}</a></td>
 					<td>${cp.description}</td>
-					<td>${cp.ocppProtocol}</td>
 					<td data-sort-value="${cp.lastHeartbeatTimestampDT.millis}">${cp.lastHeartbeatTimestamp}</td>
+					<td>
+						1
+					</td>
 					<td>
 						<form:form action="${ctxPath}/manager/chargepoints/delete/${cp.chargeBoxPk}">
 							<input type="submit" class="redSubmit" value="Delete">
