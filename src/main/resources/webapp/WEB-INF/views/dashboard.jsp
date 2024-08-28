@@ -41,7 +41,7 @@
 		Number of<br>Active Transactions
 		<span class="base formatNumber">${stats.numTransactions}</span>
 	</a>
-	<a class="tileRow1" href="${ctxPath}/manager/home/ocppJsonStatus">
+	<a class="tileRow1" href="${ctxPath}/manager/dashboard/ocppJsonStatus">
 		Number of Connected<br>JSON Charge Points
 		<span class="baseTable">
 			<span class="baseRow">
@@ -75,7 +75,7 @@
 			</span>
 		</span>
 	</a>
-	<a class="tileRow1" href="${ctxPath}/manager/home/connectorStatus">
+	<a class="tileRow1" href="${ctxPath}/manager/dashboard/connectorStatus">
 		Connector Status
 		<span class="baseTable">
 			<c:forEach items="${stats.statusCountMap}" var="it">
@@ -87,39 +87,6 @@
 		</span>
 	</a>
 	<br>
-	
-	
-
-	<!-- <table class="res" id="connectorStatusTable">
-		<thead>
-			<tr>
-				<th data-sort="string">ChargeBox ID</th>
-				<th data-sort="int">Connector ID</th>
-				<th data-sort="date">Date/Time</th>
-				<th data-sort="string">Status</th>
-				<th data-sort="string">Error Code</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${connectorStatusList}" var="cs">
-				<tr>
-					<td>
-						<a href="${ctxPath}/manager/chargepoints/details/${cs.chargeBoxPk}">${cs.chargeBoxId}</a>
-						<c:if test="${cs.jsonAndDisconnected}">
-							<a class="tooltip" href="#"><img src="${ctxPath}/static/images/offline-icon.svg" style="height: 1em">
-								<span>This JSON charge point is currently disconnected. The status information of its
-								connectors might be not up-to-date.</span>
-							</a>
-						</c:if>
-					</td>
-					<td>${cs.connectorId}</td>
-					<td data-sort-value="${cs.statusTimestamp.millis}">${cs.timeStamp}</td>
-					<td><encode:forHtml value="${cs.status}" /></td>
-					<td><encode:forHtml value="${cs.errorCode}" /></td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table> -->
 </div>
 <div>
 		<table class="res action">
@@ -129,11 +96,11 @@
 				<th data-sort="string">Description</th>
 				<th data-sort="date">Last Heartbeat</th>
 				<th data-sort="string">Connector</th>
-				<th>
+				<!-- <th>
 					<form:form action="${ctxPath}/manager/chargepoints/add" method="get">
 						<input type="submit" class="blueSubmit" value="Add New">
 					</form:form>
-				</th>
+				</th> -->
 				<th>Message</th>
 			</tr>
 			</thead>
@@ -145,11 +112,11 @@
 					<td>
 						1
 					</td>
-					<td>
+					<!-- <td>
 						<form:form action="${ctxPath}/manager/chargepoints/delete/${cp.chargeBoxPk}">
 							<input type="submit" class="redSubmit" value="Delete">
 						</form:form>
-					</td>
+					</td> -->
 					<td><button type="button" class="greenView">View</button></td>
 				</tr>
 			</c:forEach>
