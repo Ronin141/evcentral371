@@ -23,6 +23,8 @@ import jooq.steve.db.tables.records.ChargeBoxRecord;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import org.joda.time.DateTime;
 
 /**
@@ -38,6 +40,8 @@ public final class ChargePoint {
         private final int chargeBoxPk;
         private final String chargeBoxId, description, ocppProtocol, lastHeartbeatTimestamp;
         private final DateTime lastHeartbeatTimestampDT;
+        @Setter
+        private int connectorCount; // New field for storing the count of connectors
     }
 
     @Getter

@@ -33,7 +33,7 @@ Connector Status
 	</a>
 </span></section>
 
-<form:form action="${ctxPath}/manager/home/connectorStatus/query" method="get" modelAttribute="params">
+<form:form action="${ctxPath}/manager/dashboard/connectorStatus/query" method="get" modelAttribute="params">
 	<table class="userInput">
 		<tr>
 			<td>ChargeBox ID:</td>

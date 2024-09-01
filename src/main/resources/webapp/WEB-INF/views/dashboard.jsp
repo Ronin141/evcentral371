@@ -19,6 +19,51 @@
 
 --%>
 <%@ include file="00-header.jsp" %>
+<style>
+	.tileRow1 {
+            display: inline-block;
+            width: 200px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .heartbeat-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .baseTable {
+            display: flex;
+            justify-content: space-around;
+            font-size: 14px;
+        }
+
+        .baseRow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .baseCell {
+            margin-bottom: 5px;
+            font-weight: normal;
+            color: #333;
+        }
+
+        .formatNumber {
+            font-size: 18px;
+            font-weight: bold;
+            color: #8a3e3e;
+        }
+</style>
 <div class="content">
 <div class="tileWrapper">
 	<a class="tileRow1" href="${ctxPath}/manager/chargepoints">
@@ -26,13 +71,30 @@
 		<span class="base formatNumber">${stats.numChargeBoxes}</span>
 	</a>
 	<a class="tileRow1" href="${ctxPath}/manager/ocppTags">
-		Number of<br>OCPP Tags
+		Number of Connected <br>JSON Charge Points
 		<span class="base formatNumber">${stats.numOcppTags}</span>
 	</a>
-	<a class="tileRow1" href="${ctxPath}/manager/users">
+	<!-- <a class="tileRow1" href="${ctxPath}/manager/users">
 		Number of<br>Users
 		<span class="base formatNumber">${stats.numUsers}</span>
-	</a>
+	</a> -->
+	<a class="tileRow1" href="${ctxPath}/manager/chargepoints">
+        <div class="heartbeat-title">Received Heartbeats</div>
+        <div class="baseTable">
+            <div class="baseRow">
+                <span class="baseCell">Today</span>
+                <span class="formatNumber">${stats.heartbeatToday}</span>
+            </div>
+            <div class="baseRow">
+                <span class="baseCell">Yesterday</span>
+                <span class="formatNumber">${stats.heartbeatYesterday}</span>
+            </div>
+            <div class="baseRow">
+                <span class="baseCell">Earlier</span>
+                <span class="formatNumber">${stats.heartbeatEarlier}</span>
+            </div>
+        </div>
+    </a>
 	<a class="tileRow1" href="${ctxPath}/manager/reservations">
 		Number of<br>Active Reservations
 		<span class="base formatNumber">${stats.numReservations}</span>
@@ -41,7 +103,7 @@
 		Number of<br>Active Transactions
 		<span class="base formatNumber">${stats.numTransactions}</span>
 	</a>
-	<a class="tileRow1" href="${ctxPath}/manager/dashboard/ocppJsonStatus">
+	<!-- <a class="tileRow1" href="${ctxPath}/manager/dashboard/ocppJsonStatus">
 		Number of Connected<br>JSON Charge Points
 		<span class="baseTable">
 			<span class="baseRow">
@@ -57,25 +119,9 @@
 				<span class="baseCell formatNumber">${stats.numOcpp16JChargeBoxes}</span>
 			</span>
 		</span>
-	</a>
-	<a class="tileRow1" href="${ctxPath}/manager/chargepoints">
-		Received Heartbeats
-		<span class="baseTable">
-			<span class="baseRow">
-				<span class="baseCell">Today :</span>
-				<span class="baseCell formatNumber">${stats.heartbeatToday}</span>
-			</span>
-			<span class="baseRow">
-				<span class="baseCell">Yesterday :</span>
-				<span class="baseCell formatNumber">${stats.heartbeatYesterday}</span>
-			</span>
-			<span class="baseRow">
-				<span class="baseCell">Earlier :</span>
-				<span class="baseCell formatNumber">${stats.heartbeatEarlier}</span>
-			</span>
-		</span>
-	</a>
-	<a class="tileRow1" href="${ctxPath}/manager/dashboard/connectorStatus">
+	</a> -->
+	
+	<!-- <a class="tileRow1" href="${ctxPath}/manager/dashboard/connectorStatus">
 		Connector Status
 		<span class="baseTable">
 			<c:forEach items="${stats.statusCountMap}" var="it">
@@ -85,7 +131,7 @@
 				</span>
 			</c:forEach>
 		</span>
-	</a>
+	</a> -->
 	<br>
 </div>
 <div>
@@ -95,7 +141,8 @@
 				<th data-sort="string">ChargeBox ID</th>
 				<th data-sort="string">Description</th>
 				<th data-sort="date">Last Heartbeat</th>
-				<th data-sort="string">Connector</th>
+				<th data-sort="number">Connector</th>
+				<th data-sort="string">Status</th>
 				<!-- <th>
 					<form:form action="${ctxPath}/manager/chargepoints/add" method="get">
 						<input type="submit" class="blueSubmit" value="Add New">
@@ -109,14 +156,22 @@
 				<tr><td><a href="${ctxPath}/manager/chargepoints/details/${cp.chargeBoxPk}">${cp.chargeBoxId}</a></td>
 					<td>${cp.description}</td>
 					<td data-sort-value="${cp.lastHeartbeatTimestampDT.millis}">${cp.lastHeartbeatTimestamp}</td>
-					<td>
-						1
-					</td>
-					<!-- <td>
-						<form:form action="${ctxPath}/manager/chargepoints/delete/${cp.chargeBoxPk}">
-							<input type="submit" class="redSubmit" value="Delete">
-						</form:form>
-					</td> -->
+						<c:choose>
+							<c:when test="${cp.connectorCount gt 0}">
+								<td>${cp.connectorCount}</td>
+							</c:when>
+							<c:otherwise>
+								<td></td>
+							</c:otherwise>
+						</c:choose>
+						<c:choose>
+							<c:when test="${cp.connectorCount gt 0}">
+								<td>Available</td>
+							</c:when>
+							<c:otherwise>
+								<td></td>
+							</c:otherwise>
+						</c:choose>
 					<td><button type="button" class="greenView">View</button></td>
 				</tr>
 			</c:forEach>

@@ -19,7 +19,9 @@
 package de.rwth.idsg.steve.web.controller;
 
 import de.rwth.idsg.steve.repository.ChargePointRepository;
+import de.rwth.idsg.steve.repository.dto.ChargePoint;
 import de.rwth.idsg.steve.repository.dto.ConnectorStatus;
+import de.rwth.idsg.steve.repository.dto.ChargePoint.Overview;
 import de.rwth.idsg.steve.service.ChargePointHelperService;
 import de.rwth.idsg.steve.utils.ConnectorStatusCountFilter;
 import de.rwth.idsg.steve.utils.ConnectorStatusFilter;
@@ -33,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -47,6 +51,7 @@ public class HomeController {
     @Autowired private ChargePointHelperService chargePointHelperService;
 
     private static final String PARAMS = "params";
+    // private static final String PARAMS2 = "params";
 
     // -------------------------------------------------------------------------
     // Paths
@@ -62,16 +67,31 @@ public class HomeController {
     // -------------------------------------------------------------------------
 
     @RequestMapping(value = {"", HOME_PREFIX})
-    public String getHome(Model model,@ModelAttribute(PARAMS) ChargePointQueryForm params) {
+    public String getHome(Model model,
+                            @ModelAttribute("chargePointParams") ChargePointQueryForm chargePointParams, 
+                            @ModelAttribute("connectorStatusParams") ConnectorStatusForm connectorStatusParams) {
+        // Fetch the charge point overview list
+        List<ChargePoint.Overview> cpList = chargePointRepository.getOverview(chargePointParams);
 
-        // initList(model, new ChargePointQueryForm());
-        // ,@ModelAttribute(PARAMS) ConnectorStatusForm params2
-        // List<ConnectorStatus> latestList = chargePointHelperService.getChargePointConnectorStatus(params2);
-        // List<ConnectorStatus> filteredList = ConnectorStatusFilter.filterAndPreferZero(latestList);
+        // Step 1: Retrieve the list of ConnectorStatus objects
+        List<ConnectorStatus> latestList = chargePointHelperService.getChargePointConnectorStatus(connectorStatusParams);
 
-        // model.addAttribute("connectorStatusList", filteredList);
+        // Step 2: Filter the list as needed
+        List<ConnectorStatus> filteredList = ConnectorStatusFilter.filterAndPreferZero(latestList);
+
+        // Step 3: Calculate the connector count for each chargeBoxId
+        Map<String, Long> connectorCountMap = filteredList.stream()
+            .collect(Collectors.groupingBy(ConnectorStatus::getChargeBoxId, Collectors.counting()));
+
+        // Step 4: Update each ChargePoint.Overview with the connector count
+        cpList.forEach(cp -> {
+            int connectorCount = connectorCountMap.getOrDefault(cp.getChargeBoxId(), 0L).intValue();
+            cp.setConnectorCount(connectorCount); // Assuming setter is available for connectorCount
+        });
+
+        // Add attributes to the model
         model.addAttribute("stats", chargePointHelperService.getStats());
-        model.addAttribute("cpList", chargePointRepository.getOverview(params));
+        model.addAttribute("cpList", cpList);
         return "dashboard";
     }
 

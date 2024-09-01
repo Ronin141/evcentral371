@@ -57,7 +57,7 @@
             <tr>
                 <td>Connector Status:</td>
                 <td>
-                    <a href="${ctxPath}/manager/home/connectorStatus/query?chargeBoxId=${chargePointForm.chargeBoxId}">ALL</a>
+                    <a href="${ctxPath}/manager/dashboard/connectorStatus/query?chargeBoxId=${chargePointForm.chargeBoxId}">ALL</a>
                 </td>
             </tr>
             <tr>
