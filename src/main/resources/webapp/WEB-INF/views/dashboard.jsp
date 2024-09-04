@@ -153,6 +153,7 @@
 			</thead>
 			<tbody>
 			<c:forEach items="${cpList}" var="cp">
+				<c:set var="cpId" value="${cp.chargeBoxId}"></c:set>
 				<tr><td><a href="${ctxPath}/manager/chargepoints/details/${cp.chargeBoxPk}">${cp.chargeBoxId}</a></td>
 					<td>${cp.description}</td>
 					<td data-sort-value="${cp.lastHeartbeatTimestampDT.millis}">${cp.lastHeartbeatTimestamp}</td>
@@ -172,13 +173,23 @@
 								<td></td>
 							</c:otherwise>
 						</c:choose>
-					<td><button type="button" class="greenView">View</button></td>
+					<td><button type="button" class="greenView" onclick="viewLogResults('${cp.chargeBoxId}')">View</button></td>
 				</tr>
 			</c:forEach>
 			</tbody>
 		</table>
 	</div>
 </div>
+<script>
+	 function viewLogResults(chargeBoxId) {
+        // Construct the URL to fetch logs based on the context path and chargeBoxId
+		alert(chargeBoxId);
+        const url = `/log/charger/`+chargeBoxId;
+        
+        // Open the URL in a new window or tab
+        window.open(url, '_blank');
+    }
+</script>
 
 <div></div>
 	
