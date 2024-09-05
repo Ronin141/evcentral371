@@ -19,6 +19,8 @@
 
 --%>
 <%@ include file="00-header.jsp" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 	.tileRow1 {
             display: inline-block;
@@ -64,7 +66,7 @@
             color: #8a3e3e;
         }
 </style>
-<div class="content">
+<div class="content" >
 <div class="tileWrapper">
 	<a class="tileRow1" href="${ctxPath}/manager/chargepoints">
 		Number of<br>Charge Points
@@ -135,7 +137,7 @@
 	<br>
 </div>
 <div>
-		<table class="res action">
+		<table class="res action" id="partialContent">
 			<thead>
 			<tr>
 				<th data-sort="string">ChargeBox ID</th>
@@ -154,7 +156,7 @@
 			<tbody>
 			<c:forEach items="${cpList}" var="cp">
 				<c:set var="cpId" value="${cp.chargeBoxId}"></c:set>
-				<tr><td><a href="${ctxPath}/manager/chargepoints/details/${cp.chargeBoxPk}">${cp.chargeBoxId}</a></td>
+				<tr><td><a href="${ctxPath}/manager/chargepoints/details/${cp.chargeBoxPk}">${cp.chargeBoxId}</a> <i id="cloudIcon" class="fa fa-cloud" style="display:none;"></i></td>
 					<td>${cp.description}</td>
 					<td data-sort-value="${cp.lastHeartbeatTimestampDT.millis}">${cp.lastHeartbeatTimestamp}</td>
 						<c:choose>
@@ -183,12 +185,45 @@
 <script>
 	 function viewLogResults(chargeBoxId) {
         // Construct the URL to fetch logs based on the context path and chargeBoxId
-		alert(chargeBoxId);
+		// alert(chargeBoxId);
         const url = `/log/charger/`+chargeBoxId;
         
         // Open the URL in a new window or tab
         window.open(url, '_blank');
     }
+
+	$(document).ready(function(){
+            // Function to refresh partial content
+            function refreshPartialContent() {
+                $.ajax({
+                    url: 'views/dashboard.jsp',  // URL to fetch the content
+                    success: function(data) {
+						console.log("refreshing...");
+                        $('#partialContent').html(data); // Load content into the div
+                    },
+                    error: function() {
+                        console.error('Failed to load content');
+                    }
+                });
+            }
+
+            // Call the function on page load
+            // refreshPartialContent();
+			// Call this function periodically or when an event occurs
+			// checkConnection();
+            // Optionally, refresh periodically or on some event
+            // setInterval(refreshPartialContent, 1000); // Refresh every 5 seconds
+        });
+
+		function checkConnection() {
+			const isConnected = false; // Replace with your actual condition check for connection status
+
+			if (isConnected) {
+				document.getElementById("cloudIcon").style.display = "inline"; // Show the icon
+			} else {
+				document.getElementById("cloudIcon").style.display = "none"; // Hide the icon
+			}
+		}
 </script>
 
 <div></div>
