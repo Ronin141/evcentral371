@@ -66,7 +66,7 @@
             color: #8a3e3e;
         }
 </style>
-<div class="content" >
+<div class="content" id="mainContent">
 <div class="tileWrapper">
 	<a class="tileRow1" href="${ctxPath}/manager/chargepoints">
 		Number of<br>Charge Points
@@ -155,8 +155,15 @@
 			</thead>
 			<tbody>
 			<c:forEach items="${cpList}" var="cp">
-				<c:set var="cpId" value="${cp.chargeBoxId}"></c:set>
-				<tr><td><a href="${ctxPath}/manager/chargepoints/details/${cp.chargeBoxPk}">${cp.chargeBoxId}</a> <i id="cloudIcon" class="fa fa-cloud" style="display:none;"></i></td>
+				<tr><td>
+						<a href="${ctxPath}/manager/chargepoints/details/${cp.chargeBoxPk}">${cp.chargeBoxId}</a>
+						<c:if test="${cp.jsonAndDisconnected}">
+							<a class="tooltip" href="#"><img src="${ctxPath}/static/images/offline-icon.svg" style="height: 1em">
+								<span>This JSON charge point is currently disconnected. The status information of its
+								connectors might be not up-to-date.</span>
+							</a>
+						</c:if>
+					</td>
 					<td>${cp.description}</td>
 					<td data-sort-value="${cp.lastHeartbeatTimestampDT.millis}">${cp.lastHeartbeatTimestamp}</td>
 						<c:choose>
@@ -194,21 +201,30 @@
 
 	$(document).ready(function(){
             // Function to refresh partial content
-            function refreshPartialContent() {
-                $.ajax({
-                    url: 'views/dashboard.jsp',  // URL to fetch the content
-                    success: function(data) {
-						console.log("refreshing...");
-                        $('#partialContent').html(data); // Load content into the div
-                    },
-                    error: function() {
-                        console.error('Failed to load content');
-                    }
-                });
-            }
+            function refreshContent() {
+			// Fade out the current content
+			$('#mainContent').fadeOut(300, function() {
+				// Load new content using AJAX
+				$.ajax({
+					url: window.location.href, // Fetch the same URL
+					type: 'GET',
+					success: function(data) {
+						// Extract and replace only the relevant part of the content
+						let newContent = $(data).find('#mainContent').html();
+						$('#mainContent').html(newContent);
+						
+						// Fade back in with new content
+						$('#mainContent').fadeIn(300);
+					},
+					error: function(xhr, status, error) {
+						console.error('Failed to reload content:', error);
+					}
+				});
+			});
+}
 
             // Call the function on page load
-            // refreshPartialContent();
+            refreshContent();
 			// Call this function periodically or when an event occurs
 			// checkConnection();
             // Optionally, refresh periodically or on some event

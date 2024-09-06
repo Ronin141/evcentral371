@@ -18,14 +18,14 @@
  */
 package de.rwth.idsg.steve.repository.dto;
 
+import org.joda.time.DateTime;
+
 import jooq.steve.db.tables.records.AddressRecord;
 import jooq.steve.db.tables.records.ChargeBoxRecord;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-import org.joda.time.DateTime;
 
 /**
  *
@@ -34,21 +34,25 @@ import org.joda.time.DateTime;
  */
 public final class ChargePoint {
 
-    @Getter
-    @Builder
-    public static final class Overview {
-        private final int chargeBoxPk;
-        private final String chargeBoxId, description, ocppProtocol, lastHeartbeatTimestamp;
-        private final DateTime lastHeartbeatTimestampDT;
-        @Setter
-        private int connectorCount; // New field for storing the count of connectors
-    }
+	@Getter
+	@Builder
+	public static final class Overview {
+		private final int chargeBoxPk;
+		private final String chargeBoxId, description, ocppProtocol, lastHeartbeatTimestamp;
+		private final DateTime lastHeartbeatTimestampDT;
+		@Setter
+		private int connectorCount; // New field for storing the count of connectors
+	}
 
-    @Getter
-    @RequiredArgsConstructor
-    public static final class Details {
-        private final ChargeBoxRecord chargeBox;
-        private final AddressRecord address;
-    }
+	@Getter
+	@RequiredArgsConstructor
+	public static final class Details {
+		private final ChargeBoxRecord chargeBox;
+		private final AddressRecord address;
+	}
+
+	@Setter
+	@Builder.Default
+	private boolean jsonAndDisconnected = false;
 
 }
