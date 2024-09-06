@@ -191,49 +191,36 @@
     }
 
 	$(document).ready(function(){
-            // Function to refresh partial content
-            function refreshContent() {
-    // Use setInterval to refresh content every 1 second (1000 milliseconds)
-    setInterval(function() {
-        // Fade out the current content
-        $('#mainContent').fadeOut(300, function() {
-            // Load new content using AJAX
-				$.ajax({
-					url: window.location.href, // Fetch the same URL
-					type: 'GET',
-					success: function(data) {
-						// Extract and replace only the relevant part of the content
-						let newContent = $(data).find('#mainContent').html();
-						$('#mainContent').html(newContent);
+		// Function to refresh partial content
+		function refreshContent() {
+			// Use setInterval to refresh content every 1 second (1000 milliseconds)
+			setInterval(function() {
+				// Fade out the current content
+				$('#mainContent').fadeOut(300, function() {
+					// Load new content using AJAX
+						$.ajax({
+							url: window.location.href, // Fetch the same URL
+							type: 'GET',
+							success: function(data) {
+								// Extract and replace only the relevant part of the content
+								let newContent = $(data).find('#mainContent').html();
+								$('#mainContent').html(newContent);
 
-						// Fade back in with new content
-						$('#mainContent').fadeIn(300);
-					},
-					error: function(xhr, status, error) {
-						console.error('Failed to reload content:', error);
-					}
-				});
-			});
-		}, 15000); // Refresh every 1000 milliseconds (1 second)
-	}
-
-            // Call the function on page load
-            refreshContent();
-			// Call this function periodically or when an event occurs
-			// checkConnection();
-            // Optionally, refresh periodically or on some event
-            // setInterval(refreshPartialContent, 1000); // Refresh every 5 seconds
-        });
-
-		function checkConnection() {
-			const isConnected = false; // Replace with your actual condition check for connection status
-
-			if (isConnected) {
-				document.getElementById("cloudIcon").style.display = "inline"; // Show the icon
-			} else {
-				document.getElementById("cloudIcon").style.display = "none"; // Hide the icon
+								// Fade back in with new content
+								$('#mainContent').fadeIn(300);
+							},
+							error: function(xhr, status, error) {
+								console.error('Failed to reload content:', error);
+							}
+						});
+					});
+				}, 15000); // Refresh every 1000 milliseconds (1 second)
 			}
-		}
+	// Call the function on page load
+	refreshContent();
+
+	});
+
 </script>
 
 <div></div>
