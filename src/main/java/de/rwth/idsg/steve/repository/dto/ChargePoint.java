@@ -42,6 +42,10 @@ public final class ChargePoint {
 		private final DateTime lastHeartbeatTimestampDT;
 		@Setter
 		private int connectorCount; // New field for storing the count of connectors
+
+		@Setter
+		@Builder.Default
+		private boolean jsonAndDisconnected = false;
 	}
 
 	@Getter
@@ -51,8 +55,6 @@ public final class ChargePoint {
 		private final AddressRecord address;
 	}
 
-	@Setter
-	@Builder.Default
-	private boolean jsonAndDisconnected = false;
+	
 
 }
