@@ -193,9 +193,11 @@
 	$(document).ready(function(){
             // Function to refresh partial content
             function refreshContent() {
-			// Fade out the current content
-			$('#mainContent').fadeOut(300, function() {
-				// Load new content using AJAX
+    // Use setInterval to refresh content every 1 second (1000 milliseconds)
+    setInterval(function() {
+        // Fade out the current content
+        $('#mainContent').fadeOut(300, function() {
+            // Load new content using AJAX
 				$.ajax({
 					url: window.location.href, // Fetch the same URL
 					type: 'GET',
@@ -203,7 +205,7 @@
 						// Extract and replace only the relevant part of the content
 						let newContent = $(data).find('#mainContent').html();
 						$('#mainContent').html(newContent);
-						
+
 						// Fade back in with new content
 						$('#mainContent').fadeIn(300);
 					},
@@ -212,7 +214,8 @@
 					}
 				});
 			});
-}
+		}, 15000); // Refresh every 1000 milliseconds (1 second)
+	}
 
             // Call the function on page load
             refreshContent();
