@@ -68,32 +68,26 @@ public class HomeController {
 
     @RequestMapping(value = {"", HOME_PREFIX})
     public String getHome(Model model,
-                            @ModelAttribute("chargePointParams") ChargePointQueryForm chargePointParams, 
-                            @ModelAttribute("connectorStatusParams") ConnectorStatusForm connectorStatusParams) {
+                          @ModelAttribute("chargePointParams") ChargePointQueryForm chargePointParams, 
+                          @ModelAttribute("connectorStatusParams") ConnectorStatusForm connectorStatusParams) {
+        
         // Fetch the charge point overview list
         List<ChargePoint.Overview> cpList = chargePointRepository.getOverview(chargePointParams);
-
+    
         // Step 1: Retrieve the list of ConnectorStatus objects
         List<ConnectorStatus> latestList = chargePointHelperService.getChargePointConnectorStatus(connectorStatusParams);
-
+    
         // Step 2: Filter the list as needed
         List<ConnectorStatus> filteredList = ConnectorStatusFilter.filterAndPreferZero(latestList);
-
-        // Step 3: Calculate the connector count for each chargeBoxId
-        Map<String, Long> connectorCountMap = filteredList.stream()
-            .collect(Collectors.groupingBy(ConnectorStatus::getChargeBoxId, Collectors.counting()));
-
-        // Step 4: Update each ChargePoint.Overview with the connector count
-        cpList.forEach(cp -> {
-            int connectorCount = connectorCountMap.getOrDefault(cp.getChargeBoxId(), 0L).intValue();
-            cp.setConnectorCount(connectorCount); // Assuming setter is available for connectorCount
-        });
-
+    
+    
         // Add attributes to the model
         model.addAttribute("stats", chargePointHelperService.getStats());
         model.addAttribute("cpList", cpList);
+        model.addAttribute("connectorStatusList", filteredList);
         return "dashboard";
     }
+    
 
     @RequestMapping(value = CONNECTOR_STATUS_PATH)
     public String getConnectorStatus(Model model) {
