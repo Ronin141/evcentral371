@@ -22,6 +22,7 @@ import de.rwth.idsg.steve.repository.ChargePointRepository;
 import de.rwth.idsg.steve.repository.dto.ChargePoint;
 import de.rwth.idsg.steve.repository.dto.ConnectorStatus;
 import de.rwth.idsg.steve.repository.dto.ChargePoint.Overview;
+import de.rwth.idsg.steve.service.ChargeBoxDescriptionService;
 import de.rwth.idsg.steve.service.ChargePointHelperService;
 import de.rwth.idsg.steve.utils.ConnectorStatusCountFilter;
 import de.rwth.idsg.steve.utils.ConnectorStatusFilter;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -62,6 +64,16 @@ public class HomeController {
     private static final String OCPP_JSON_STATUS = HOME_PREFIX + "/ocppJsonStatus";
     private static final String CONNECTOR_STATUS_PATH = HOME_PREFIX + "/connectorStatus";
     private static final String CONNECTOR_STATUS_QUERY_PATH = HOME_PREFIX + "/connectorStatus/query";
+
+    private final ChargeBoxDescriptionService descriptionService;
+
+    public HomeController(ChargeBoxDescriptionService descriptionService,
+                          ChargePointHelperService chargePointHelperService,
+                          ChargePointRepository chargePointRepository) {
+        this.descriptionService = descriptionService;
+        this.chargePointHelperService = chargePointHelperService;
+        this.chargePointRepository = chargePointRepository;
+    }
     // -------------------------------------------------------------------------
     // HTTP methods
     // -------------------------------------------------------------------------
@@ -73,18 +85,24 @@ public class HomeController {
         
         // Fetch the charge point overview list
         List<ChargePoint.Overview> cpList = chargePointRepository.getOverview(chargePointParams);
-    
+
         // Step 1: Retrieve the list of ConnectorStatus objects
         List<ConnectorStatus> latestList = chargePointHelperService.getChargePointConnectorStatus(connectorStatusParams);
-    
+
         // Step 2: Filter the list as needed
         List<ConnectorStatus> filteredList = ConnectorStatusFilter.filterAndPreferZero(latestList);
-    
-    
+
+        // Example usage: Retrieve description by ChargeBoxId
+        for(ConnectorStatus cs : filteredList) {
+        	Optional<String> description = descriptionService.getDescriptionByChargeBoxId(cs.getChargeBoxId(), cpList, filteredList);
+        	description.ifPresent(desc -> cs.setDescription(desc));
+        }
+
         // Add attributes to the model
         model.addAttribute("stats", chargePointHelperService.getStats());
         model.addAttribute("cpList", cpList);
         model.addAttribute("connectorStatusList", filteredList);
+
         return "dashboard";
     }
     

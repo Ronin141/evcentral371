@@ -80,14 +80,14 @@
 		<a class="tileRow1" href="${ctxPath}/manager/dashboard/ocppJsonStatus">
 			Number of Connected<br>JSON Charge Points
 			<span class="baseTable">
-				<span class="baseRow">
+				<!-- <span class="baseRow">
 					<span class="baseCell">OCPP 1.2 :</span>
 					<span class="baseCell formatNumber">${stats.numOcpp12JChargeBoxes}</span>
 				</span>
 				<span class="baseRow">
 					<span class="baseCell">OCPP 1.5 :</span>
 					<span class="baseCell formatNumber">${stats.numOcpp15JChargeBoxes}</span>
-				</span>
+				</span> -->
 				<span class="baseRow">
 					<span class="baseCell">OCPP 1.6 :</span>
 					<span class="baseCell formatNumber">${stats.numOcpp16JChargeBoxes}</span>
@@ -115,8 +115,8 @@
 				</span>
 			</span>
 		</a>
-	</div>
-	<div>
+	<!-- </div>
+	<div> -->
 		<a class="tileRow1" href="${ctxPath}/manager/reservations">
 			Number of<br>Active Reservations
 			<span class="base formatNumber">${stats.numReservations}</span>

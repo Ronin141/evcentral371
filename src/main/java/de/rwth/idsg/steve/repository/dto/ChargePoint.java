@@ -40,6 +40,7 @@ public final class ChargePoint {
 		private final int chargeBoxPk;
 		private final String chargeBoxId, description, ocppProtocol, lastHeartbeatTimestamp;
 		private final DateTime lastHeartbeatTimestampDT;
+	
 	}
 
 	@Getter

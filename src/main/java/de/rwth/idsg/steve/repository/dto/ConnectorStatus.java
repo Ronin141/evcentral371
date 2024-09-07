@@ -32,7 +32,7 @@ import org.joda.time.DateTime;
 @Getter
 @Builder
 public final class ConnectorStatus {
-    private final String chargeBoxId,description, timeStamp, status, errorCode;
+    private final String chargeBoxId, timeStamp, status, errorCode;
     private final int chargeBoxPk, connectorId;
 
     // For additional internal processing. Not related to the humanized
@@ -46,4 +46,8 @@ public final class ConnectorStatus {
     @Setter
     @Builder.Default
     private boolean jsonAndDisconnected = false;
+    
+    @Setter
+    @Builder.Default
+    private String description = "";
 }
