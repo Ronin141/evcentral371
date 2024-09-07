@@ -68,6 +68,7 @@ public final class ConnectorStatusFilter {
                           .values()
                           .stream()
                           .flatMap(val -> processForOneStation(val, strategy).stream())
+                          .sorted(Comparator.comparing(ConnectorStatus::getChargeBoxId)) // Sort by ChargeBoxId
                           .collect(Collectors.toList());
     }
 
