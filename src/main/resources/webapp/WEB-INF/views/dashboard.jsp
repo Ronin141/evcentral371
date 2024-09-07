@@ -21,7 +21,7 @@
 <%@ include file="00-header.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<style>
+<!-- <style>
 	.tileRow1 {
             display: inline-block;
             width: 200px;
@@ -65,7 +65,7 @@
             font-weight: bold;
             color: #8a3e3e;
         }
-</style>
+</style> -->
 <div class="content" id="mainContent">
 <div class="tileWrapper">
 	<div>
@@ -73,9 +73,26 @@
 			Number of<br>Charge Points
 			<span class="base formatNumber">${stats.numChargeBoxes}</span>
 		</a>
-		<a class="tileRow1" href="${ctxPath}/manager/ocppTags">
+		<!-- <a class="tileRow1" href="${ctxPath}/manager/ocppTags">
 			Number of Connected <br>JSON Charge Points
 			<span class="base formatNumber">${stats.numOcppTags}</span>
+		</a> -->
+		<a class="tileRow1" href="${ctxPath}/manager/dashboard/ocppJsonStatus">
+			Number of Connected<br>JSON Charge Points
+			<span class="baseTable">
+				<span class="baseRow">
+					<span class="baseCell">OCPP 1.2 :</span>
+					<span class="baseCell formatNumber">${stats.numOcpp12JChargeBoxes}</span>
+				</span>
+				<span class="baseRow">
+					<span class="baseCell">OCPP 1.5 :</span>
+					<span class="baseCell formatNumber">${stats.numOcpp15JChargeBoxes}</span>
+				</span>
+				<span class="baseRow">
+					<span class="baseCell">OCPP 1.6 :</span>
+					<span class="baseCell formatNumber">${stats.numOcpp16JChargeBoxes}</span>
+				</span>
+			</span>
 		</a>
 		<!-- <a class="tileRow1" href="${ctxPath}/manager/users">
 			Number of<br>Users
@@ -145,6 +162,7 @@
 			<thead>
 			<tr>
 				<th data-sort="string">ChargeBox ID</th>
+				<th data-sort="string">Description</th>
 				<th data-sort="string">Connector</th>
 				<th data-sort="date">Last Heartbeat</th>
 				<!-- <th data-sort="number">Connector</th> -->
@@ -169,6 +187,7 @@
 								</a>
 							</c:if>
 						</td>
+						<td>${cs.description}</td>
 						<td>${cs.connectorId}</td>
 						<td data-sort-value="${cs.statusTimestamp.millis}">${cs.timeStamp}</td>
 						<td><encode:forHtml value="${cs.status}" /></td>
@@ -210,9 +229,8 @@
 				});
 			}, 1000); // Refresh every 1000 milliseconds (1 second)
 		}
-	// Call the function on page load
-	refreshContent();
-
+		// Call the function on page load
+		refreshContent();
 	});
 
 </script>
