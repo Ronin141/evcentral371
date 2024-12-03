@@ -76,6 +76,6 @@
                     <li><a href="${ctxPath}/manager/about">ABOUT</a></li>
                     <li><a href="${ctxPath}/manager/signout">SIGN OUT</a></li>
                 </ul>
-            </div>
         </div>
-    <div class="main-wrapper">
+    </div>
+<div class="main-wrapper">
